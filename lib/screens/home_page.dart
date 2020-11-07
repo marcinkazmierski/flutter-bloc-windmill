@@ -17,35 +17,6 @@ class HomePage extends StatelessWidget {
           body: (state is AccountCreateSuccess)
               ? WindmillPage(accountModel: state.accountModel)
               : CreateAccountPage(),
-          bottomNavigationBar: showBottomNavigationBar
-              ? BottomNavigationBar(
-                  currentIndex: 0,
-                  // this will be set when a new tab is tapped
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.blueAccent,
-                  selectedItemColor: Colors.white,
-                  unselectedItemColor: Colors.white.withOpacity(.60),
-                  selectedFontSize: 14,
-                  unselectedFontSize: 14,
-                  onTap: (value) {
-                    print("BottomNavigationBarItem tap");
-                  },
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: new Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: new Icon(Icons.mail),
-                      label: 'Messages',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.person),
-                      label: 'Profile',
-                    )
-                  ],
-                )
-              : null,
         );
       },
     );
