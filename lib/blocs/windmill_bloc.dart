@@ -54,6 +54,14 @@ abstract class WindmillEvent extends Equatable {
   const WindmillEvent();
 }
 
+class WindmillCreateInitialize extends WindmillEvent {
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => 'WindmillCreateInitialize {}';
+}
+
 class WindmillCreateButtonPressed extends WindmillEvent {
   final String name;
   final String location;
@@ -113,7 +121,6 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
   @override
   Stream<WindmillState> mapEventToState(WindmillEvent event) async* {
     if (event is WindmillCreateButtonPressed) {
-      yield WindmillCreateNewInProgress();
       try {
         // TODO: power as const?
         WindmillModel windmillModel = new WindmillModel(
@@ -129,6 +136,8 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
         yield WindmillLoadSuccess(
             windmillModel: event.accountModel.windmills.first);
       }
+    }else if(event is WindmillCreateInitialize){
+      yield WindmillCreateNewInProgress();
     }
   }
 

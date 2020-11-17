@@ -52,9 +52,6 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                           fit: BoxFit.cover,
                           image: AssetImage("assets/images/bg.png"))),
                 ),
-                Container(
-                  color: Color.fromRGBO(0, 0, 0, 0.2),
-                ),
                 Center(
                   child: SingleChildScrollView(
                     padding: EdgeInsets.all(25.0),

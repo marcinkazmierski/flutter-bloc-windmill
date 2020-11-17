@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:windmill/blocs/windmill_bloc.dart';
 import 'package:windmill/models/account_model.dart';
+import 'package:windmill/screens/create_windmill_page.dart';
+import 'package:windmill/screens/view_windmill_page.dart';
 
 class WindmillPage extends StatelessWidget {
   final AccountModel accountModel;
@@ -46,31 +48,9 @@ class _WindmillFormState extends State<WindmillForm> {
       child: BlocBuilder<WindmillBloc, WindmillState>(
         builder: (context, state) {
           return Scaffold(
-            body: Center(
-              child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.wb_sunny_outlined, size: 50),
-                          title: Text('Your Windmill'),
-                          subtitle:
-                              Text('Name: ' + this.widget.accountModel.name),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(30),
-                          child: Image.asset('assets/images/windmill.png'),
-                        ),
-                      ])),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print("floatingActionButton onPressed");
-              },
-              tooltip: 'Add new',
-              child: Icon(Icons.add),
-            ),
+            body: (state is WindmillCreateNewInProgress)
+                ? CreateWindmillPage(accountModel: this.widget.accountModel)
+                : ViewWindmillPage(accountModel: this.widget.accountModel),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: 0,
               // this will be set when a new tab is tapped

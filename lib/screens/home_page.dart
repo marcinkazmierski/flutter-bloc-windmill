@@ -15,6 +15,7 @@ class HomePage extends StatelessWidget {
 
         return Scaffold(
           body: (state is AccountCreateSuccess)
+              //? CreateWindmillPage(accountModel: state.accountModel)
               ? WindmillPage(accountModel: state.accountModel)
               : CreateAccountPage(),
         );
