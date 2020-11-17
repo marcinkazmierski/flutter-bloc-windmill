@@ -32,52 +32,39 @@ class ViewWindmillForm extends StatefulWidget {
 class _ViewWindmillFormState extends State<ViewWindmillForm> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WindmillBloc, WindmillState>(
-      listener: (context, state) {
-        if (state is WindmillCreateFailure) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${state.error}'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
+    return BlocBuilder<WindmillBloc, WindmillState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Center(
+            child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ListTile(
+                        leading: Icon(Icons.wb_sunny_outlined, size: 50),
+                        title: Text('Your Windmill'),
+                        subtitle: Text('Name: ' +
+                            (state as WindmillLoadSuccess).windmillModel.name),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(30),
+                        child: Image.asset('assets/images/windmill.png'),
+                      ),
+                    ])),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              print("floatingActionButton onPressed!");
+              BlocProvider.of<WindmillBloc>(context).add(
+                WindmillCreateInitialize(),
+              );
+            },
+            tooltip: 'Add new',
+            child: Icon(Icons.add),
+          ),
+        );
       },
-      child: BlocBuilder<WindmillBloc, WindmillState>(
-        builder: (context, state) {
-          return Scaffold(
-            body: Center(
-              child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.wb_sunny_outlined, size: 50),
-                          title: Text('Your Windmill'),
-                          subtitle:
-                              Text('Name: ' + this.widget.accountModel.name),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(30),
-                          child: Image.asset('assets/images/windmill.png'),
-                        ),
-                      ])),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print("floatingActionButton onPressed !");
-
-                BlocProvider.of<WindmillBloc>(context).add(
-                  WindmillCreateInitialize(),
-                );
-              },
-              tooltip: 'Add new',
-              child: Icon(Icons.add),
-            ),
-          );
-        },
-      ),
     );
   }
 }

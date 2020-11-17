@@ -71,6 +71,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     if (event is AccountCreateButtonPressed) {
       yield AccountCreateInProgress();
       try {
+        if (event.name.isEmpty) {
+          throw Exception("Empty name!");
+        }
         await Future.delayed(Duration(seconds: 3));
         // TODO: save via repository!
         AccountModel accountModel = new AccountModel(

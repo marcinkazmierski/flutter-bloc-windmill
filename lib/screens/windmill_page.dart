@@ -48,9 +48,9 @@ class _WindmillFormState extends State<WindmillForm> {
       child: BlocBuilder<WindmillBloc, WindmillState>(
         builder: (context, state) {
           return Scaffold(
-            body: (state is WindmillCreateNewInProgress)
-                ? CreateWindmillPage(accountModel: this.widget.accountModel)
-                : ViewWindmillPage(accountModel: this.widget.accountModel),
+            body: (state is WindmillLoadSuccess)
+                ? ViewWindmillPage(accountModel: this.widget.accountModel)
+                : CreateWindmillPage(accountModel: this.widget.accountModel),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: 0,
               // this will be set when a new tab is tapped

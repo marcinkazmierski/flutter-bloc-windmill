@@ -27,16 +27,6 @@ class WindmillLoadSuccess extends WindmillState {
 
 class WindmillCreateNewInProgress extends WindmillState {}
 
-class WindmillCreateNewSuccess extends WindmillState {
-  final WindmillModel windmillModel;
-
-  const WindmillCreateNewSuccess({@required this.windmillModel})
-      : assert(windmillModel != null);
-
-  @override
-  List<Object> get props => [windmillModel];
-}
-
 class WindmillCreateFailure extends WindmillState {
   final String error;
 
@@ -121,11 +111,19 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
   @override
   Stream<WindmillState> mapEventToState(WindmillEvent event) async* {
     if (event is WindmillCreateButtonPressed) {
+      yield WindmillCreateNewInProgress();
       try {
+        if (event.name.isEmpty) {
+          throw Exception("Empty name!");
+        }
+        if (event.location.isEmpty) {
+          throw Exception("Empty location!");
+        }
         // TODO: power as const?
         WindmillModel windmillModel = new WindmillModel(
             name: event.name, location: event.location, power: 25);
-        yield WindmillCreateNewSuccess(windmillModel: windmillModel);
+        //todo: add to accountModel!
+        yield WindmillLoadSuccess(windmillModel: windmillModel);
       } catch (error) {
         yield WindmillCreateFailure(error: error.toString());
       }
@@ -136,7 +134,7 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
         yield WindmillLoadSuccess(
             windmillModel: event.accountModel.windmills.first);
       }
-    }else if(event is WindmillCreateInitialize){
+    } else if (event is WindmillCreateInitialize) {
       yield WindmillCreateNewInProgress();
     }
   }
