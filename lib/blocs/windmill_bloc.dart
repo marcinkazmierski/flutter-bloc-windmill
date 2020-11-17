@@ -25,6 +25,8 @@ class WindmillLoadSuccess extends WindmillState {
   List<Object> get props => [windmillModel];
 }
 
+class WindmillCreateNewInitial extends WindmillState {}
+
 class WindmillCreateNewInProgress extends WindmillState {}
 
 class WindmillCreateFailure extends WindmillState {
@@ -93,13 +95,13 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
                     .accountModel
                     .windmills
                     .isEmpty
-                ? WindmillCreateNewInProgress()
+                ? WindmillCreateNewInitial()
                 : WindmillLoadSuccess(
                     windmillModel: (accountBloc.state as AccountCreateSuccess)
                         .accountModel
                         .windmills
                         .first)
-            : WindmillCreateNewInProgress()) {
+            : WindmillCreateNewInitial()) {
     print(">>>> WindmillBloc START");
     accountSubscription = accountBloc.listen((state) {
       if (state is AccountCreateSuccess) {
@@ -119,6 +121,7 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
         if (event.location.isEmpty) {
           throw Exception("Empty location!");
         }
+        await Future.delayed(Duration(seconds: 3));
         // TODO: power as const?
         WindmillModel windmillModel = new WindmillModel(
             name: event.name, location: event.location, power: 25);
@@ -129,13 +132,13 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
       }
     } else if (event is AccountUpdated) {
       if (event.accountModel.windmills.isEmpty) {
-        yield WindmillCreateNewInProgress();
+        yield WindmillCreateNewInitial();
       } else {
         yield WindmillLoadSuccess(
             windmillModel: event.accountModel.windmills.first);
       }
     } else if (event is WindmillCreateInitialize) {
-      yield WindmillCreateNewInProgress();
+      yield WindmillCreateNewInitial();
     }
   }
 

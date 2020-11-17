@@ -109,8 +109,11 @@ class _CreateWindmillFormState extends State<CreateWindmillForm> {
                   SizedBox(
                     height: 15.0,
                   ),
-                  Center(child: null //CircularProgressIndicator()
-                      ),
+                  Center(
+                    child: state is WindmillCreateNewInProgress
+                        ? CircularProgressIndicator()
+                        : null,
+                  ),
                   FadeAnimation(
                       2,
                       RaisedButton(
