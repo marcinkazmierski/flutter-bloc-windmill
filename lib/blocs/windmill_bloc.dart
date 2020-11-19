@@ -83,6 +83,18 @@ class AccountUpdated extends WindmillEvent {
   String toString() => 'AccountUpdated { accountModel: $accountModel }';
 }
 
+class ChangeActiveWindmill extends WindmillEvent {
+  final WindmillModel windmillModel;
+
+  const ChangeActiveWindmill({@required this.windmillModel});
+
+  @override
+  List<Object> get props => [windmillModel];
+
+  @override
+  String toString() => 'ChangeActiveWindmill { accountModel: $windmillModel }';
+}
+
 /// BLOC
 class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
   final AccountBloc accountBloc;
@@ -139,6 +151,8 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
       }
     } else if (event is WindmillCreateInitialize) {
       yield WindmillCreateNewInitial();
+    } else if (event is ChangeActiveWindmill) {
+      yield WindmillLoadSuccess(windmillModel: event.windmillModel);
     }
   }
 
