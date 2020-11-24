@@ -69,14 +69,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                 ),
                 Card(
                   child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Text('Your Windmill'),
-                          LineReportChart(),
-                        ],
-                      )),
+                      padding: EdgeInsets.all(20), child: LineReportChart()),
                 ),
               ],
             ),
@@ -106,27 +99,32 @@ class LineReportChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 2.2,
-      child: LineChart(mainData()),
+      aspectRatio: 2.0,
+      child: Stack(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                'Monthly Sales',
+                style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2),
+                textAlign: TextAlign.center,
+              ),
+              Expanded(
+                child: LineChart(mainData()),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  List<FlSpot> getSports() {
-    return [
-      FlSpot(0, .5),
-      FlSpot(1, 1.5),
-      FlSpot(2, .5),
-      FlSpot(3, .7),
-      FlSpot(4, .2),
-      FlSpot(5, 2),
-      FlSpot(6, 1.5),
-      FlSpot(7, 1.7),
-      FlSpot(8, 1),
-      FlSpot(9, 2.8),
-      FlSpot(10, 2.5),
-      FlSpot(11, 2.65),
-    ];
-  }
+
 
   LineChartData mainData() {
     return LineChartData(
@@ -135,7 +133,6 @@ class LineReportChart extends StatelessWidget {
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
-          reservedSize: 22,
           getTextStyles: (value) => const TextStyle(
               color: Color(0xff68737d),
               fontWeight: FontWeight.bold,
@@ -175,7 +172,6 @@ class LineReportChart extends StatelessWidget {
             }
             return '';
           },
-          reservedSize: 28,
           margin: 12,
         ),
       ),
