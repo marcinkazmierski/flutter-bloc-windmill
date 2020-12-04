@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:windmill/blocs/windmill_bloc.dart';
 import 'package:windmill/models/account_model.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class ViewWindmillPage extends StatelessWidget {
   final AccountModel accountModel;
@@ -38,45 +39,81 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
         return Scaffold(
           body: Center(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(30),
-                  child: Text('Your Windmill',
+                  padding: EdgeInsets.only(top: 40, bottom: 14),
+                  child: Text(this.widget.accountModel.name,
                       style: TextStyle(color: Colors.black, fontSize: 32)),
                 ),
-                SizedBox(
-                  height: 200.0,
-                  child: ListView.builder(
-                    physics: ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    itemBuilder: (BuildContext context, int index) => Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('Your Windmill'),
-                            Expanded(
-                              child: Image.asset('assets/images/windmill.png'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: Padding(
-                      padding: EdgeInsets.all(20), child: LineReportChart()),
+                CarouselSlider(
+                  options: CarouselOptions(
+                      height: 500,
+                      enableInfiniteScroll: false,
+                      initialPage: (state is WindmillLoadSuccess)
+                          ? this
+                              .widget
+                              .accountModel
+                              .windmills
+                              .indexOf(state.windmillModel)
+                          : 0),
+                  items: this.widget.accountModel.windmills.map((windmill) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 4.0, // soften the shadow
+                                  spreadRadius: 1.0, //extend the shadow
+                                  offset: Offset(
+                                    4, // Move to right 10  horizontally
+                                    4, // Move to bottom 10 Vertically
+                                  ),
+                                )
+                              ],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: Text(windmill.name,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20)),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(bottom: 10),
+                                child: Text(windmill.location,
+                                    style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontSize: 14)),
+                              ),
+                              Expanded(
+                                child:
+                                    Image.asset('assets/images/windmill.png'),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.all(20),
+                                  child: LineReportChart()),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              print("floatingActionButton onPressed!");
               BlocProvider.of<WindmillBloc>(context).add(
                 WindmillCreateInitialize(),
               );
@@ -106,10 +143,10 @@ class LineReportChart extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                'Monthly Sales',
+                'Monthly production',
                 style: TextStyle(
                     color: Colors.blueAccent,
-                    fontSize: 32,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2),
                 textAlign: TextAlign.center,
@@ -123,8 +160,6 @@ class LineReportChart extends StatelessWidget {
       ),
     );
   }
-
-
 
   LineChartData mainData() {
     return LineChartData(
@@ -149,6 +184,8 @@ class LineReportChart extends StatelessWidget {
                 return 'Kwi';
               case 5:
                 return 'Maj';
+              case 6:
+                return 'Cze';
             }
             return '';
           },
@@ -159,37 +196,35 @@ class LineReportChart extends StatelessWidget {
           getTextStyles: (value) => const TextStyle(
             color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
-            fontSize: 12,
+            fontSize: 10,
           ),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 1:
-                return '10 tys';
-              case 3:
-                return '30 tys';
-              case 5:
-                return '50 tys';
+              case 100:
+                return '100 kW';
+              case 300:
+                return '300 kW';
+              case 500:
+                return '500 kW';
             }
             return '';
           },
+          reservedSize: 28,
           margin: 12,
         ),
       ),
       borderData: FlBorderData(show: false),
-      minX: 0,
-      maxX: 6,
       minY: 0,
-      maxY: 6,
+      maxY: 600,
       lineBarsData: [
         LineChartBarData(
           spots: [
-            FlSpot(0, 3),
-            FlSpot(1, 2),
-            FlSpot(2, 5),
-            FlSpot(3, 3.1),
-            FlSpot(4, 4),
-            FlSpot(5, 3),
-            FlSpot(6, 4),
+            FlSpot(1, 200),
+            FlSpot(2, 510),
+            FlSpot(3, 290),
+            FlSpot(4, 370),
+            FlSpot(5, 180),
+            FlSpot(6, 420),
           ],
           isCurved: true,
           colors: gradientColors,

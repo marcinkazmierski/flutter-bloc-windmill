@@ -135,9 +135,16 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
         }
         await Future.delayed(Duration(seconds: 3));
         // TODO: power as const?
+
         WindmillModel windmillModel = new WindmillModel(
             name: event.name, location: event.location, power: 25);
         //todo: add to accountModel!
+        if (this.accountBloc.state is AccountCreateSuccess) {
+          (this.accountBloc.state as AccountCreateSuccess)
+              .accountModel
+              .windmills
+              .add(windmillModel);
+        }
         yield WindmillLoadSuccess(windmillModel: windmillModel);
       } catch (error) {
         yield WindmillCreateFailure(error: error.toString());
