@@ -37,6 +37,11 @@ class _CreateWindmillFormState extends State<CreateWindmillForm> {
   @override
   Widget build(BuildContext context) {
     _onCreateButtonPressed() {
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
+
       BlocProvider.of<WindmillBloc>(context).add(
         WindmillCreateButtonPressed(
             name: _nameController.text, location: _locationController.text),

@@ -46,16 +46,16 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                   child: Text(this.widget.accountModel.name,
                       style: TextStyle(color: Colors.black, fontSize: 32)),
                 ),
-                CarouselSlider(
+              CarouselSlider(
                   options: CarouselOptions(
                       height: 500,
                       enableInfiniteScroll: false,
                       initialPage: (state is WindmillLoadSuccess)
                           ? this
-                              .widget
-                              .accountModel
-                              .windmills
-                              .indexOf(state.windmillModel)
+                          .widget
+                          .accountModel
+                          .windmills
+                          .indexOf(state.windmillModel)
                           : 0),
                   items: this.widget.accountModel.windmills.map((windmill) {
                     return Builder(
@@ -63,7 +63,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           margin:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                          EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -78,7 +78,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                                 )
                               ],
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
+                              BorderRadius.all(Radius.circular(10))),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -97,7 +97,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                               ),
                               Expanded(
                                 child:
-                                    Image.asset('assets/images/windmill.png'),
+                                Image.asset('assets/images/windmill.png'),
                               ),
                               Padding(
                                   padding: EdgeInsets.all(20),

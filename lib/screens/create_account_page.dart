@@ -23,6 +23,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   @override
   Widget build(BuildContext context) {
     _onCreateButtonPressed() {
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
+
       BlocProvider.of<AccountBloc>(context).add(
         AccountCreateButtonPressed(
           name: _nameController.text,
