@@ -50,7 +50,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                   options: CarouselOptions(
                       height: 500,
                       enableInfiniteScroll: false,
-                      initialPage: (state is WindmillLoadSuccess)
+                      initialPage: (state is WindmillLoadSuccessState)
                           ? this
                           .widget
                           .accountModel
@@ -115,7 +115,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               BlocProvider.of<WindmillBloc>(context).add(
-                WindmillCreateInitialize(),
+                WindmillCreateInitializeEvent(),
               );
             },
             tooltip: 'Add new',

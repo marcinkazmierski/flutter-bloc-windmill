@@ -15,30 +15,30 @@ abstract class WindmillState extends Equatable {
   List<Object> get props => [];
 }
 
-class WindmillLoadSuccess extends WindmillState {
+class WindmillLoadSuccessState extends WindmillState {
   final WindmillModel windmillModel;
 
-  const WindmillLoadSuccess({@required this.windmillModel})
+  const WindmillLoadSuccessState({@required this.windmillModel})
       : assert(windmillModel != null);
 
   @override
   List<Object> get props => [windmillModel];
 }
 
-class WindmillCreateNewInitial extends WindmillState {}
+class WindmillCreateNewInitialState extends WindmillState {}
 
-class WindmillCreateNewInProgress extends WindmillState {}
+class WindmillCreateNewInProgressState extends WindmillState {}
 
-class WindmillCreateFailure extends WindmillState {
+class WindmillCreateFailureState extends WindmillState {
   final String error;
 
-  const WindmillCreateFailure({this.error});
+  const WindmillCreateFailureState({this.error});
 
   @override
   List<Object> get props => [error];
 
   @override
-  String toString() => 'WindmillCreateFailure { error: $error }';
+  String toString() => 'WindmillCreateFailureState { error: $error }';
 }
 
 ///EVENT
@@ -46,19 +46,19 @@ abstract class WindmillEvent extends Equatable {
   const WindmillEvent();
 }
 
-class WindmillCreateInitialize extends WindmillEvent {
+class WindmillCreateInitializeEvent extends WindmillEvent {
   @override
   List<Object> get props => [];
 
   @override
-  String toString() => 'WindmillCreateInitialize {}';
+  String toString() => 'WindmillCreateInitializeEvent {}';
 }
 
-class WindmillCreateButtonPressed extends WindmillEvent {
+class WindmillCreateButtonPressedEvent extends WindmillEvent {
   final String name;
   final String location;
 
-  const WindmillCreateButtonPressed({
+  const WindmillCreateButtonPressedEvent({
     @required this.name,
     @required this.location,
   });
@@ -68,31 +68,31 @@ class WindmillCreateButtonPressed extends WindmillEvent {
 
   @override
   String toString() =>
-      'WindmillCreateButtonPressed { name: $name, location: $location }';
+      'WindmillCreateButtonPressedEvent { name: $name, location: $location }';
 }
 
-class AccountUpdated extends WindmillEvent {
+class AccountUpdatedEvent extends WindmillEvent {
   final AccountModel accountModel;
 
-  const AccountUpdated({@required this.accountModel});
+  const AccountUpdatedEvent({@required this.accountModel});
 
   @override
   List<Object> get props => [accountModel];
 
   @override
-  String toString() => 'AccountUpdated { accountModel: $accountModel }';
+  String toString() => 'AccountUpdatedEvent { accountModel: $accountModel }';
 }
 
-class ChangeActiveWindmill extends WindmillEvent {
+class ChangeActiveWindmillEvent extends WindmillEvent {
   final WindmillModel windmillModel;
 
-  const ChangeActiveWindmill({@required this.windmillModel});
+  const ChangeActiveWindmillEvent({@required this.windmillModel});
 
   @override
   List<Object> get props => [windmillModel];
 
   @override
-  String toString() => 'ChangeActiveWindmill { accountModel: $windmillModel }';
+  String toString() => 'ChangeActiveWindmillEvent { accountModel: $windmillModel }';
 }
 
 /// BLOC
@@ -102,30 +102,30 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
 
   WindmillBloc({@required this.accountBloc})
       : assert(accountBloc != null),
-        super(accountBloc.state is AccountCreateSuccess
-            ? (accountBloc.state as AccountCreateSuccess)
+        super(accountBloc.state is AccountCreateSuccessState
+            ? (accountBloc.state as AccountCreateSuccessState)
                     .accountModel
                     .windmills
                     .isEmpty
-                ? WindmillCreateNewInitial()
-                : WindmillLoadSuccess(
-                    windmillModel: (accountBloc.state as AccountCreateSuccess)
+                ? WindmillCreateNewInitialState()
+                : WindmillLoadSuccessState(
+                    windmillModel: (accountBloc.state as AccountCreateSuccessState)
                         .accountModel
                         .windmills
                         .first)
-            : WindmillCreateNewInitial()) {
+            : WindmillCreateNewInitialState()) {
     print(">>>> WindmillBloc START");
     accountSubscription = accountBloc.listen((state) {
-      if (state is AccountCreateSuccess) {
-        add(AccountUpdated(accountModel: state.accountModel));
+      if (state is AccountCreateSuccessState) {
+        add(AccountUpdatedEvent(accountModel: state.accountModel));
       }
     });
   }
 
   @override
   Stream<WindmillState> mapEventToState(WindmillEvent event) async* {
-    if (event is WindmillCreateButtonPressed) {
-      yield WindmillCreateNewInProgress();
+    if (event is WindmillCreateButtonPressedEvent) {
+      yield WindmillCreateNewInProgressState();
       try {
         if (event.name.isEmpty) {
           throw Exception("Empty name!");
@@ -139,27 +139,27 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
         WindmillModel windmillModel = new WindmillModel(
             name: event.name, location: event.location, power: 25);
         //todo: add to accountModel!
-        if (this.accountBloc.state is AccountCreateSuccess) {
-          (this.accountBloc.state as AccountCreateSuccess)
+        if (this.accountBloc.state is AccountCreateSuccessState) {
+          (this.accountBloc.state as AccountCreateSuccessState)
               .accountModel
               .windmills
               .add(windmillModel);
         }
-        yield WindmillLoadSuccess(windmillModel: windmillModel);
+        yield WindmillLoadSuccessState(windmillModel: windmillModel);
       } catch (error) {
-        yield WindmillCreateFailure(error: error.toString());
+        yield WindmillCreateFailureState(error: error.toString());
       }
-    } else if (event is AccountUpdated) {
+    } else if (event is AccountUpdatedEvent) {
       if (event.accountModel.windmills.isEmpty) {
-        yield WindmillCreateNewInitial();
+        yield WindmillCreateNewInitialState();
       } else {
-        yield WindmillLoadSuccess(
+        yield WindmillLoadSuccessState(
             windmillModel: event.accountModel.windmills.first);
       }
-    } else if (event is WindmillCreateInitialize) {
-      yield WindmillCreateNewInitial();
-    } else if (event is ChangeActiveWindmill) {
-      yield WindmillLoadSuccess(windmillModel: event.windmillModel);
+    } else if (event is WindmillCreateInitializeEvent) {
+      yield WindmillCreateNewInitialState();
+    } else if (event is ChangeActiveWindmillEvent) {
+      yield WindmillLoadSuccessState(windmillModel: event.windmillModel);
     }
   }
 

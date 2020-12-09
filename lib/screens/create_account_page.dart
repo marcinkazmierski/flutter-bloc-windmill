@@ -29,7 +29,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       }
 
       BlocProvider.of<AccountBloc>(context).add(
-        AccountCreateButtonPressed(
+        AccountCreateButtonPressedEvent(
           name: _nameController.text,
         ),
       );
@@ -37,7 +37,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
 
     return BlocListener<AccountBloc, AccountState>(
       listener: (context, state) {
-        if (state is AccountCreateFailure) {
+        if (state is AccountCreateFailureState) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
@@ -108,7 +108,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                           height: 15.0,
                         ),
                         Center(
-                          child: state is AccountCreateInProgress
+                          child: state is AccountCreateInProgressState
                               ? CircularProgressIndicator()
                               : null,
                         ),

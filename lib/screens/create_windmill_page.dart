@@ -43,7 +43,7 @@ class _CreateWindmillFormState extends State<CreateWindmillForm> {
       }
 
       BlocProvider.of<WindmillBloc>(context).add(
-        WindmillCreateButtonPressed(
+        WindmillCreateButtonPressedEvent(
             name: _nameController.text, location: _locationController.text),
       );
     }
@@ -115,7 +115,7 @@ class _CreateWindmillFormState extends State<CreateWindmillForm> {
                     height: 15.0,
                   ),
                   Center(
-                    child: state is WindmillCreateNewInProgress
+                    child: state is WindmillCreateNewInProgressState
                         ? CircularProgressIndicator()
                         : null,
                   ),

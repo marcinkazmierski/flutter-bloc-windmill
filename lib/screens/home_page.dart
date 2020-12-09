@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     return BlocBuilder<AccountBloc, AccountState>(
       builder: (context, state) {
         return Scaffold(
-          body: (state is AccountCreateSuccess)
+          body: (state is AccountCreateSuccessState)
               ? WindmillPage(accountModel: state.accountModel)
               : CreateAccountPage(),
         );

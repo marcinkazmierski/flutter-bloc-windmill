@@ -36,7 +36,7 @@ class _WindmillFormState extends State<WindmillForm> {
   Widget build(BuildContext context) {
     return BlocListener<WindmillBloc, WindmillState>(
       listener: (context, state) {
-        if (state is WindmillCreateFailure) {
+        if (state is WindmillCreateFailureState) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
@@ -48,7 +48,7 @@ class _WindmillFormState extends State<WindmillForm> {
       child: BlocBuilder<WindmillBloc, WindmillState>(
         builder: (context, state) {
           return Scaffold(
-            body: (state is WindmillLoadSuccess)
+            body: (state is WindmillLoadSuccessState)
                 ? ViewWindmillPage(accountModel: this.widget.accountModel)
                 : CreateWindmillPage(accountModel: this.widget.accountModel),
             bottomNavigationBar: BottomNavigationBar(

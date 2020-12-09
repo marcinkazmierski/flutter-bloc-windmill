@@ -13,30 +13,30 @@ abstract class AccountState extends Equatable {
   List<Object> get props => [];
 }
 
-class AccountInitial extends AccountState {}
+class AccountInitialState extends AccountState {}
 
-class AccountCreateInProgress extends AccountState {}
+class AccountCreateInProgressState extends AccountState {}
 
-class AccountCreateSuccess extends AccountState {
+class AccountCreateSuccessState extends AccountState {
   final AccountModel accountModel;
 
-  const AccountCreateSuccess({@required this.accountModel})
+  const AccountCreateSuccessState({@required this.accountModel})
       : assert(accountModel != null);
 
   @override
   List<Object> get props => [accountModel];
 }
 
-class AccountCreateFailure extends AccountState {
+class AccountCreateFailureState extends AccountState {
   final String error;
 
-  const AccountCreateFailure({this.error});
+  const AccountCreateFailureState({this.error});
 
   @override
   List<Object> get props => [error];
 
   @override
-  String toString() => 'AccountCreateFailure { error: $error }';
+  String toString() => 'AccountCreateFailureState { error: $error }';
 }
 
 ///EVENT
@@ -44,10 +44,10 @@ abstract class AccountEvent extends Equatable {
   const AccountEvent();
 }
 
-class AccountCreateButtonPressed extends AccountEvent {
+class AccountCreateButtonPressedEvent extends AccountEvent {
   final String name;
 
-  const AccountCreateButtonPressed({
+  const AccountCreateButtonPressedEvent({
     @required this.name,
   });
 
@@ -55,12 +55,12 @@ class AccountCreateButtonPressed extends AccountEvent {
   List<Object> get props => [name];
 
   @override
-  String toString() => 'AccountCreateButtonPressed { name: $name }';
+  String toString() => 'AccountCreateButtonPressedEvent { name: $name }';
 }
 
 /// BLOC
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
-  AccountBloc() : super(AccountInitial()) {
+  AccountBloc() : super(AccountInitialState()) {
     print(">>>> AccountBloc START");
   }
 
@@ -68,8 +68,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
   @override
   Stream<AccountState> mapEventToState(AccountEvent event) async* {
-    if (event is AccountCreateButtonPressed) {
-      yield AccountCreateInProgress();
+    if (event is AccountCreateButtonPressedEvent) {
+      yield AccountCreateInProgressState();
       try {
         if (event.name.isEmpty) {
           throw Exception("Empty name!");
@@ -78,9 +78,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         // TODO: save via repository!
         AccountModel accountModel = new AccountModel(
             name: event.name, windmills: new List<WindmillModel>());
-        yield AccountCreateSuccess(accountModel: accountModel);
+        yield AccountCreateSuccessState(accountModel: accountModel);
       } catch (error) {
-        yield AccountCreateFailure(error: error.toString());
+        yield AccountCreateFailureState(error: error.toString());
       }
     }
   }
