@@ -46,16 +46,16 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                   child: Text(this.widget.accountModel.name,
                       style: TextStyle(color: Colors.black, fontSize: 32)),
                 ),
-              CarouselSlider(
+                CarouselSlider(
                   options: CarouselOptions(
                       height: 500,
                       enableInfiniteScroll: false,
                       initialPage: (state is WindmillLoadSuccessState)
                           ? this
-                          .widget
-                          .accountModel
-                          .windmills
-                          .indexOf(state.windmillModel)
+                              .widget
+                              .accountModel
+                              .windmills
+                              .indexOf(state.windmillModel)
                           : 0),
                   items: this.widget.accountModel.windmills.map((windmill) {
                     return Builder(
@@ -63,7 +63,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           margin:
-                          EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -72,21 +72,50 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                                   blurRadius: 4.0, // soften the shadow
                                   spreadRadius: 1.0, //extend the shadow
                                   offset: Offset(
-                                    4, // Move to right 10  horizontally
-                                    4, // Move to bottom 10 Vertically
+                                    4, // horizontally
+                                    4, // Vertically
                                   ),
                                 )
                               ],
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10))),
+                                  BorderRadius.all(Radius.circular(10))),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 12),
-                                child: Text(windmill.name,
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 20)),
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 55.0),
+                                      child: Text(
+                                        windmill.name,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        BlocProvider.of<WindmillBloc>(context).add(
+                                          WindmillDeleteButtonPressedEvent(windmillModel: windmill),
+                                        );
+                                      },
+                                      color: Colors.redAccent,
+                                      textColor: Colors.white,
+                                      child: Icon(
+                                        Icons.delete_forever,
+                                        size: 20,
+                                      ),
+                                      padding: EdgeInsets.all(8),
+                                      shape: CircleBorder(),
+                                      minWidth: 0,
+                                    ),
+                                  )
+                                ],
                               ),
                               Container(
                                 padding: EdgeInsets.only(bottom: 10),
@@ -97,7 +126,7 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                               ),
                               Expanded(
                                 child:
-                                Image.asset('assets/images/windmill.png'),
+                                    Image.asset('assets/images/windmill.png'),
                               ),
                               Padding(
                                   padding: EdgeInsets.all(20),

@@ -11,4 +11,9 @@ class AccountModel extends Equatable {
 
   @override
   List<Object> get props => [name, windmills, cash];
+
+  @override
+  String toString() {
+    return 'AccountModel{name: $name, windmills: $windmills}';
+  }
 }

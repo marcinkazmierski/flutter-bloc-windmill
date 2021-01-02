@@ -11,4 +11,9 @@ class WindmillModel extends Equatable {
 
   @override
   List<Object> get props => [name, location, power];
+
+  @override
+  String toString() {
+    return 'WindmillModel{name: $name}';
+  }
 }
