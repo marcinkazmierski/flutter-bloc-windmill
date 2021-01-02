@@ -71,6 +71,21 @@ class WindmillCreateButtonPressedEvent extends WindmillEvent {
       'WindmillCreateButtonPressedEvent { name: $name, location: $location }';
 }
 
+class WindmillDeleteButtonPressedEvent extends WindmillEvent {
+  final WindmillModel windmillModel;
+
+  const WindmillDeleteButtonPressedEvent({
+    @required this.windmillModel,
+  });
+
+  @override
+  List<Object> get props => [windmillModel];
+
+  @override
+  String toString() =>
+      'WindmillDeleteButtonPressedEvent { windmillModel: $windmillModel }';
+}
+
 class AccountUpdatedEvent extends WindmillEvent {
   final AccountModel accountModel;
 
@@ -92,7 +107,8 @@ class ChangeActiveWindmillEvent extends WindmillEvent {
   List<Object> get props => [windmillModel];
 
   @override
-  String toString() => 'ChangeActiveWindmillEvent { accountModel: $windmillModel }';
+  String toString() =>
+      'ChangeActiveWindmillEvent { accountModel: $windmillModel }';
 }
 
 /// BLOC
@@ -109,10 +125,11 @@ class WindmillBloc extends Bloc<WindmillEvent, WindmillState> {
                     .isEmpty
                 ? WindmillCreateNewInitialState()
                 : WindmillLoadSuccessState(
-                    windmillModel: (accountBloc.state as AccountCreateSuccessState)
-                        .accountModel
-                        .windmills
-                        .first)
+                    windmillModel:
+                        (accountBloc.state as AccountCreateSuccessState)
+                            .accountModel
+                            .windmills
+                            .first)
             : WindmillCreateNewInitialState()) {
     print(">>>> WindmillBloc START");
     accountSubscription = accountBloc.listen((state) {
