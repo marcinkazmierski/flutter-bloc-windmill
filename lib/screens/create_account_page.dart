@@ -94,6 +94,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                                 color: Colors.white,
                               ),
                               controller: _nameController,
+                              key: Key('accountNameInput'),
                               decoration: InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.mode_edit,
@@ -115,6 +116,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                         FadeAnimation(
                             2,
                             RaisedButton(
+                              key: Key('createAccountButton'),
                               onPressed: _onCreateButtonPressed,
                               child: Padding(
                                   padding: EdgeInsets.all(15.0),
