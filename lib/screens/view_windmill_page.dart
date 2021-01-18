@@ -4,6 +4,7 @@ import 'package:windmill/blocs/windmill_bloc.dart';
 import 'package:windmill/models/account_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:windmill/models/windmill_model.dart';
 
 class ViewWindmillPage extends StatelessWidget {
   final AccountModel accountModel;
@@ -48,6 +49,21 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                 ),
                 CarouselSlider(
                   options: CarouselOptions(
+                      onPageChanged:
+                          (int index, CarouselPageChangedReason reason) {
+                        if (this
+                            .widget
+                            .accountModel
+                            .windmills
+                            .asMap()
+                            .containsKey(index)) {
+                          WindmillModel windmill =
+                              this.widget.accountModel.windmills.asMap()[index];
+                          BlocProvider.of<WindmillBloc>(context).add(
+                            ChangeActiveWindmillEvent(windmillModel: windmill),
+                          );
+                        }
+                      },
                       height: 500,
                       enableInfiniteScroll: false,
                       initialPage: (state is WindmillLoadSuccessState)
@@ -100,8 +116,10 @@ class _ViewWindmillFormState extends State<ViewWindmillForm> {
                                   Container(
                                     child: MaterialButton(
                                       onPressed: () {
-                                        BlocProvider.of<WindmillBloc>(context).add(
-                                          WindmillDeleteButtonPressedEvent(windmillModel: windmill),
+                                        BlocProvider.of<WindmillBloc>(context)
+                                            .add(
+                                          WindmillDeleteButtonPressedEvent(
+                                              windmillModel: windmill),
                                         );
                                       },
                                       color: Colors.redAccent,
