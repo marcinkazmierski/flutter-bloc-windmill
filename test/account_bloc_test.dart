@@ -2,6 +2,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:windmill/blocs/account_bloc.dart';
 
+
+/**
+ * TODO
+ * https://blog.codemagic.io/flutter-unit-testing-bloc-with-codemagic/
+ * https://resocoder.com/2019/11/29/bloc-test-tutorial-easier-way-to-test-blocs-in-dart-flutter/
+ */
 void main() {
   AccountBloc accountBloc;
 
